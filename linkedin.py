@@ -3,13 +3,21 @@
 import urllib2
 import requests
 import StringIO
+import sys
 from lxml import etree
+
+if len(sys.argv) != 2: 
+    print 'Usage: linkedin.py <profile_address>' 
+    sys.exit(1) 
 
 f = open('linkedin_resume', 'w')
 
-res = requests.get("http://fr.linkedin.com/in/remygardette")
+res = requests.get(sys.argv[1])
 parser = etree.HTMLParser()
 tree   = etree.parse(StringIO.StringIO(res.content), parser)
+
+f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+f.write('<resume>\n')
 
 for div in tree.xpath("//div[contains(@class, 'position')]"):
 	if len(div.xpath("div/h3/span[@class='title']")) > 0:
@@ -36,6 +44,8 @@ for div in tree.xpath("//div[contains(@class, 'position')]"):
 			f.write(desc)
 			f.write('</description>\n')
 		f.write('</position>\n')
+
+f.write('</resume>\n')
 
 f.close()
 
