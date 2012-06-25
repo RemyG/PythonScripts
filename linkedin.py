@@ -1,16 +1,17 @@
 #! /usr/bin/env python
 
+import codecs
 import urllib2
 import requests
 import StringIO
 import sys
 from lxml import etree
 
-if len(sys.argv) != 2: 
-    print 'Usage: linkedin.py <profile_address>' 
+if len(sys.argv) != 3: 
+    print 'Usage: linkedin.py <profile_address> <output_file>' 
     sys.exit(1) 
 
-f = open('linkedin_resume', 'w')
+f = codecs.open(sys.argv[2], encoding='utf-8', mode='w')
 
 res = requests.get(sys.argv[1])
 parser = etree.HTMLParser()
