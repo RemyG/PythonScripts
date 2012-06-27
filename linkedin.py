@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 
+import cgi
 import codecs
 import urllib2
 import requests
@@ -42,6 +43,7 @@ for div in tree.xpath("//div[contains(@class, 'position')]"):
 			f.write('<description>')
 			desc = etree.tostring(div.xpath("p[contains(@class, 'description')]")[0])
 			desc = desc[desc.find(">")+1:desc.rfind("<")].strip()
+			desc = cgi.escape(desc)
 			f.write(desc)
 			f.write('</description>\n')
 		f.write('</position>\n')

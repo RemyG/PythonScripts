@@ -21,11 +21,13 @@ The format of the output file is:
     </position>
 </resume>
 ```
+The description is escaped for its HTML entities.
 
 ### Installation
 
 To install this script, you'll need (of course) to have Python installed.
 The modules needed to run this script are:  
+- cgi
 - codecs  
 - urllib2  
 - requests (to install: sudo pip install requests)  
