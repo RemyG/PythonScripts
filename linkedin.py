@@ -1,20 +1,43 @@
 #! /usr/bin/env python
+# -*- coding: UTF-8 -*-
+
+"""
+Copyright 2012 Remy Gardette
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+"""
 
 import cgi
 import codecs
-import urllib2
 import requests
 import StringIO
 import sys
 from lxml import etree
 
+
 if len(sys.argv) != 3: 
-    print 'Usage: linkedin.py <profile_address> <output_file>' 
-    sys.exit(1) 
+	print 'Usage: linkedin.py <profile_address> <output_file>' 
+	sys.exit(1)
+	
+profile_url = sys.argv[1]
+output_file = sys.argv[2]
 
-f = codecs.open(sys.argv[2], encoding='utf-8', mode='w')
+pos_nb = 0
 
-res = requests.get(sys.argv[1])
+f = codecs.open(output_file, encoding='utf-8', mode='w')
+
+res = requests.get(profile_url)
 parser = etree.HTMLParser()
 tree   = etree.parse(StringIO.StringIO(res.content), parser)
 
@@ -23,6 +46,7 @@ f.write('<resume>\n')
 
 for div in tree.xpath("//div[contains(@class, 'position')]"):
 	if len(div.xpath("div/h3/span[@class='title']")) > 0:
+		pos_nb += 1
 		f.write('<position>\n')
 		if len(div.xpath("div/h3/span[@class='title']")) > 0:
 			f.write('<title>')
@@ -52,3 +76,6 @@ f.write('</resume>\n')
 
 f.close()
 
+print "Profile " + profile_url+ " successfully scraped"
+print "with " + str(pos_nb) + " positions."
+print "Output in " + output_file
