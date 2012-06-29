@@ -14,6 +14,7 @@ The format of the output file is:
         <company>Your company</company>
         <from>From date</from>
         <to>To date (or Present)</to>
+        <location>The location of the company</location>
         <description>The job description</description>
     </position>
     <position>
