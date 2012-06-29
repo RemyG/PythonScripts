@@ -56,6 +56,10 @@ for div in tree.xpath("//div[contains(@class, 'position')]"):
 			f.write('<company>')
 			f.write(div.xpath("div/h4//span/text()")[0])
 			f.write('</company>\n')
+		if len(div.xpath("p[@class='period']/span[@class='location']")) > 0:
+			f.write('<location>')
+			f.write(div.xpath("p[@class='period']/span[@class='location']/text()")[0])
+			f.write('</location>\n')
 		if len(div.xpath("p[@class='period']/abbr")) > 1:
 			f.write('<from>')
 			f.write(div.xpath("p[@class='period']/abbr/text()")[0])
