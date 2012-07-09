@@ -20,10 +20,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import cgi
 import codecs
+import dateconverter
 import requests
 import StringIO
 import sys
 from lxml import etree
+from dateconverter import DateConverter
 
 
 if len(sys.argv) != 3: 
@@ -36,6 +38,8 @@ output_file = sys.argv[2]
 pos_nb = 0
 
 f = codecs.open(output_file, encoding='utf-8', mode='w')
+
+dc = DateConverter()
 
 res = requests.get(profile_url)
 parser = etree.HTMLParser()
@@ -62,10 +66,10 @@ for div in tree.xpath("//div[contains(@class, 'position')]"):
 			f.write('</location>\n')
 		if len(div.xpath("p[@class='period']/abbr")) > 1:
 			f.write('<from>')
-			f.write(div.xpath("p[@class='period']/abbr/text()")[0])
+			f.write(dc.dict_sub(div.xpath("p[@class='period']/abbr/text()")[0]))
 			f.write('</from>\n')
 			f.write('<to>')
-			f.write(div.xpath("p[@class='period']/abbr/text()")[1])
+			f.write(dc.dict_sub(div.xpath("p[@class='period']/abbr/text()")[1]))
 			f.write('</to>\n')
 		if len(div.xpath("p[contains(@class, 'description')]/text()")) > 0:
 			f.write('<description>')
